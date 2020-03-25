@@ -85,12 +85,12 @@
 				loader.classList.add('loader-show');
 				getTODO().then(response => {
 					loader.classList.remove('loader-show');
-					const content = response.map(item => {
+					const content = response.map(({userId, id, title, completed} = {}) => {
                         return `<div class = 'data-item'>
-                            <div><span>User ID:</span><span>${item.userId}</span></div>
-                            <div><span>ID:</span><span>${item.userId}</span></div>
-                            <div><span>title:</span><span>${item.title}</span></div>
-                            <div><span>completed:</span><span>${item.completed}</span></div>
+                            <div><span>User ID:</span><span>${userId}</span></div>
+                            <div><span>ID:</span><span>${id}</span></div>
+                            <div><span>title:</span><span>${title}</span></div>
+                            <div><span>completed:</span><span>${completed}</span></div>
                         </div> `;
                     }) || [];
 
@@ -106,13 +106,13 @@
 				loader.classList.add('loader-show');
 				getSW().then(({results = []}) => {
 					loader.classList.remove('loader-show');
-					const content = results.map((item = {}) => {
+					const content = results.map(({name, height, mass, hair_color, skin_color} = {}) => {
 						return `<div class = 'data-item'>
-                            <div><span>Name: </span><span>${item.name}</span></div>
-                            <div><span>Height: </span><span>${item.height}</span></div>
-                            <div><span>Mass: </span><span>${item.mass}</span></div>
-                            <div><span>Hair Color: </span><span>${item.hair_color}</span></div>
-                            <div><span>Skin Color: </span><span>${item.skin_color}</span></div>
+                            <div><span>Name: </span><span>${name}</span></div>
+                            <div><span>Height: </span><span>${height}</span></div>
+                            <div><span>Mass: </span><span>${mass}</span></div>
+                            <div><span>Hair Color: </span><span>${hair_color}</span></div>
+                            <div><span>Skin Color: </span><span>${skin_color}</span></div>
                         </div> `;
 					}) || [];
 
