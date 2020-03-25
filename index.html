@@ -31,65 +31,64 @@
             background-color: darkorange;
         }
 
+        #results-container {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            background-color: red;
+            padding: 10px;
+        }
+
         .data-item {
             background-color: orange;
             border-radius: 5px;
             color: white;
             padding: 10px;
+            margin: 10px;
+            width: 40%;
         }
     </style>
     <script src="./js/utils.js"></script>
     <script>
 		document.addEventListener('DOMContentLoaded', (event) => {
-			let results = document.getElementsByClassName("results")[0].children[1];
-			let todos = document.getElementsByClassName("to-dos")[0];
-			let article = document.getElementsByClassName("article")[0];
+			const resultsContainer = document.getElementById("results-container");
+			const todos = document.getElementsByClassName("to-dos")[0];
+			const article = document.getElementsByClassName("article")[0];
+			const todosBtn = todos.children[1];
 
-			let todosBtn = todos.children[1];
 			todosBtn.addEventListener('click', (e) => {
 				getTODO().then(response => {
-					while (results.firstChild) {
-						results.removeChild(results.firstChild);
-					}
+                    const content = response.map(item => {
+                        return `<div class = 'data-item'>
+                            <div><span>User ID:</span><span>${item.userId}</span></div>
+                            <div><span>ID:</span><span>${item.userId}</span></div>
+                            <div><span>title:</span><span>${item.title}</span></div>
+                            <div><span>completed:</span><span>${item.completed}</span></div>
+                        </div> `;
+                    }) || [];
 
-					let div;
-					div = document.createElement("div");
-					div.className = "data-item";
-					div.innerHTML = `
-<div><span>User ID:</span><span>${response.userId}</span></div>
-<div><span>ID:</span><span>${response.userId}</span></div>
-<div><span>title:</span><span>${response.title}</span></div>
-<div><span>completed:</span><span>${response.completed}</span></div>`;
-
-					results.appendChild(div);
+					resultsContainer.innerHTML = (content.join(''));
 
 				}).catch(error => {
 					console.error(error.message);
 				});
 			});
 
-			let articleBtn = article.children[1];
+			const articleBtn = article.children[1];
 			articleBtn.addEventListener('click', (e) => {
-				getArticle().then(response => {
-					response = response.result[0];
+				getSW().then(({results = []}) => {
+					const content = results.map(item => {
+						return `<div class = 'data-item'>
+                            <div><span>Name: </span><span>${item.name}</span></div>
+                            <div><span>Height: </span><span>${item.height}</span></div>
+                            <div><span>Mass: </span><span>${item.mass}</span></div>
+                            <div><span>Hair Color: </span><span>${item.hair_color}</span></div>
+                            <div><span>Skin Color: </span><span>${item.skin_color}</span></div>
+                        </div> `;
+					}) || [];
 
-					console.log(response);
-
-					while (results.firstChild) {
-						results.removeChild(results.firstChild);
-					}
-
-					let div;
-					div = document.createElement("div");
-					div.className = "data-item";
-					div.innerHTML = `
-<div><span>Author: </span><span>${response.author.display_name}</span></div>
-<div><span>User Name: </span><span>${response.author.username}</span></div>
-<div><span>Short Title: </span><span>${response.short_title}</span></div>
-<div><span>Slug: </span><span>${response.slug}</span></div>
-<div><span>Summary: </span><span>${response.summary}</span></div>`;
-
-					results.appendChild(div);
+					resultsContainer.innerHTML = (content.join(''));
 
 				}).catch(error => {
 					console.error(error.message);
@@ -108,12 +107,12 @@
         <button>Get Data</button>
     </div>
     <div class="article">
-        <div class="title">Article:</div>
+        <div class="title">Star Wars:</div>
         <button>Get Data</button>
     </div>
     <div class="results">
         <div class="title">Results:</div>
-        <div></div>
+        <div id="results-container"></div>
     </div>
 </div>
 </body>

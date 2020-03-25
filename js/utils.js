@@ -1,13 +1,17 @@
 function getTODO() {
-	return fetch('https://jsonplaceholder.typicode.com/todos/1')
+	return fetch('https://jsonplaceholder.typicode.com/todos')
 		.then(response => {
 			return response.json();
+		}).catch(error => {
+			return error;
 		});
 };
 
-function getArticle() {
-	return fetch('http://mtrest.advance.net/mtrest/articles/?blog_id=3674&limit=10&offset=0')
+function getSW() {
+	return fetch('https://swapi.co/api/people/')
 		.then(response => {
 			return response.json();
+		}).catch(error => {
+			return error;
 		});
 };
