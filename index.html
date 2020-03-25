@@ -38,6 +38,8 @@
             justify-content: center;
             background-color: red;
             padding: 10px;
+            max-height: 500px;
+            overflow-y: scroll;
         }
 
         .data-item {
@@ -48,6 +50,27 @@
             margin: 10px;
             width: 40%;
         }
+
+        .loader-show {
+            display: block;
+            align-self: center;
+            z-index: 1000;
+            position: absolute;
+            margin-top: 33%;
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
     </style>
     <script src="./js/utils.js"></script>
     <script>
@@ -56,10 +79,13 @@
 			const todos = document.getElementsByClassName("to-dos")[0];
 			const article = document.getElementsByClassName("article")[0];
 			const todosBtn = todos.children[1];
+			const loader = document.getElementById("loader-indicator");
 
 			todosBtn.addEventListener('click', (e) => {
+				loader.classList.add('loader-show');
 				getTODO().then(response => {
-                    const content = response.map(item => {
+					loader.classList.remove('loader-show');
+					const content = response.map(item => {
                         return `<div class = 'data-item'>
                             <div><span>User ID:</span><span>${item.userId}</span></div>
                             <div><span>ID:</span><span>${item.userId}</span></div>
@@ -77,8 +103,10 @@
 
 			const articleBtn = article.children[1];
 			articleBtn.addEventListener('click', (e) => {
+				loader.classList.add('loader-show');
 				getSW().then(({results = []}) => {
-					const content = results.map(item => {
+					loader.classList.remove('loader-show');
+					const content = results.map((item = {}) => {
 						return `<div class = 'data-item'>
                             <div><span>Name: </span><span>${item.name}</span></div>
                             <div><span>Height: </span><span>${item.height}</span></div>
@@ -102,6 +130,7 @@
 </head>
 <body>
 <div class="container">
+    <div id="loader-indicator"></div>
     <div class="to-dos">
         <div class="title">TODO:</div>
         <button>Get Data</button>
@@ -114,6 +143,7 @@
         <div class="title">Results:</div>
         <div id="results-container"></div>
     </div>
+
 </div>
 </body>
 </html>
